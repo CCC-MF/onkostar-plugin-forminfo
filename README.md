@@ -52,6 +52,21 @@ Beispiel für das zurückgegebene Ergebnis mit den Inhalten in `result`.
 }
 ```
 
+## Beispiel zur Nutzung in einem Formularscript
+
+Das folgende Beispiel lädt einen simplen Dialog aus dem Plugin und zeigt die Inhalte des Formulars zu einem Formularverweis an.
+
+```javascript
+Ext.syncRequire('app.plugins.forminfo.FormInfoPlugin', () => {
+    let FormInfoPlugin = Ext.ClassManager.get('FormInfoPlugin');
+    if (FormInfoPlugin === null) {
+        // ggf Warnung ausgeben
+        return;
+    }
+    FormInfoPlugin.showFormContentInfo(this, getFieldValue('reftumorkonferenz').id);
+});
+```
+
 ## Build
 
 Für das Bauen des Plugins ist zwingend JDK in Version 11 erforderlich.
