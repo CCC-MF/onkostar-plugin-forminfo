@@ -31,12 +31,14 @@ import de.itc.onkostar.api.analysis.AnalyzerRequirement;
 import de.itc.onkostar.api.analysis.IProcedureAnalyzer;
 import de.itc.onkostar.api.analysis.OnkostarPluginType;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class FormInfoPlugin implements IProcedureAnalyzer {
 
     private final IOnkostarApi onkostarApi;
