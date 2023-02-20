@@ -36,24 +36,44 @@ class FormInfoPlugin {
                     onFailure();
                     return;
                 }
-                Object.entries(response.result).forEach((formElement) => {
-                    if (formElement.length < 2) {
+                response.result.forEach((formEntry) => {
+                    if (formEntry.type === 'BUTTON' || formEntry.type === 'FORM_REFERENCE' || formEntry.type === 'SUBFORM') {
                         return;
                     }
-                    if (formElement[1].description.trim().length === 0) {
+                    if (formEntry.type === 'SECTION') {
                         items.push({
-                            cls: 'infoBoxLabel',
-                            text: '*' + formElement[1].field,
+                            html: `<div style="margin: 2px 2px 2px 0; border: 1px solid lightgray; background: linear-gradient(whitesmoke, lightgray); white-space: nowrap; font-weight: bold; font-size: 16px !important">${formEntry.description}</div>`,
                         });
-                    } else {
                         items.push({
-                            cls: 'infoBoxLabel',
-                            text: formElement[1].description,
+                            html: '<hr style="border-style: dashed"/>'
                         });
                     }
-                    items.push({
-                        text: formElement[1].value,
-                    });
+                    if (formEntry.type === 'GROUP') {
+                        items.push({
+                            html: `<div style="margin: 2px 2px 2px 0; white-space: nowrap; font-weight: bold; font-size: 16px !important">${formEntry.description}</div>`,
+                        });
+                        items.push({
+                            html: '<hr style="border-style: dashed"/>'
+                        });
+                    }
+                    if (formEntry.type === 'INPUT' && typeof formEntry.value == 'string' && formEntry.value.trim().length > 0) {
+                        items.push({
+                            cls: 'infoBoxLabel',
+                            text: formEntry.description,
+                        });
+                        items.push({
+                            text: formEntry.value,
+                        });
+                    }
+                    if (formEntry.type === 'INPUT' && formEntry.value && typeof formEntry.value == 'object') {
+                        items.push({
+                            cls: 'infoBoxLabel',
+                            text: formEntry.description,
+                        });
+                        items.push({
+                            html: `<code style="color: gray">${JSON.stringify(formEntry.value)}</code>`,
+                        });
+                    }
                 });
                 showDialog();
             },
@@ -72,12 +92,10 @@ class FormInfoPlugin {
             var table = Ext.create('Ext.panel.Panel', {
                 layout: {
                     type: 'table',
-                    // The total column count must be specified here
                     columns: 2
                 },
                 bodyPadding: 8,
                 defaults: {
-                    // applied to each contained panel
                     xtype: 'label'
                 },
                 items: items
@@ -85,8 +103,8 @@ class FormInfoPlugin {
 
             Ext.create('Ext.window.Window', {
                 title: 'Info',
-                height: 400,
-                width: 600,
+                height: 600,
+                width: 800,
                 layout: 'fit',
                 items: [table]
             }).show();

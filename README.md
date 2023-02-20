@@ -32,23 +32,29 @@ Beispiel für das zurückgegebene Ergebnis mit den Inhalten in `result`.
     "exception": null,
     "message": "The method executed successfully."
   },
-  "result": {
-    "datum": {
+  "result": [
+    {
       "field": "datum",
       "description": "Datum der Utersuchung",
-      "value": "01.01.2023"
-    },
-    "evidenzlevel": {
+      "value": "01.01.2023",
+      "type": "INPUT"
+    },{
+      "field": "grpEvidenzlevel",
+      "description": "Evidenzlevel",
+      "value": null,
+      "type": "GROUP"
+    },{
       "field": "evidenzlevel",
       "description": "Evidenzlevel",
-      "value": "m1A"
-    },
-    "evidenzlevelzusatz": {
+      "value": "m1A",
+      "type": "INPUT"
+    },{
       "field": "evidenzlevelzusatz",
       "description": "Evidenzlevel (Zusatz)",
-      "value": "Z"
+      "value": "Z",
+      "type": "INPUT"
     }
-  }
+  ]
 }
 ```
 
@@ -66,6 +72,8 @@ Ext.syncRequire('app.plugins.forminfo.FormInfoPlugin', () => {
     FormInfoPlugin.showFormContentInfo(this, getFieldValue('reftumorkonferenz').id);
 });
 ```
+
+![Beispiel des Infodialogs](./examples/image.png)
 
 ## Build
 
