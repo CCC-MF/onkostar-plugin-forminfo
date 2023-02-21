@@ -34,26 +34,26 @@ class FormInfoService {
     }
 
     private Function<Entry, Result> getResultFunction(Procedure procedure) {
-        return elem -> {
-            var value = procedure.getValue(elem.name);
+        return entry -> {
+            var value = procedure.getValue(entry.name);
 
             if (null != value.getDate()) {
                 return new Result(
-                        elem.name,
-                        elem.description,
+                        entry.name,
+                        entry.description,
                         new SimpleDateFormat("dd.MM.yyyy").format(value.getDate()),
-                        elem.type
+                        entry.type
                 );
             }
 
             if (null != value.getPropertyCatalogueVersion()) {
                 var catalogueEntry = getPropertyCatalogueEntry(value.getPropertyCatalogueVersion(), value.getString());
                 if (null != catalogueEntry) {
-                    return new Result(elem.name, elem.description, catalogueEntry, elem.type);
+                    return new Result(entry.name, entry.description, catalogueEntry, entry.type);
                 }
             }
 
-            return new Result(elem.name, elem.description, value.getValue(), elem.type);
+            return new Result(entry.name, entry.description, value.getValue(), entry.type);
         };
     }
 
