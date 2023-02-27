@@ -110,6 +110,28 @@ class FormInfoPlugin {
             }).show();
         }
     }
+
+    static getMainFormProcedureId(context, procedureId, callback) {
+        context.executePluginMethod(
+            'FormInfoPlugin',
+            'getMainFormProcedureId',
+            { id: procedureId },
+            (response) => {
+                if (response.status.code === 1) {
+                    callback(response);
+                    return;
+                }
+                if (response.status.exception) {
+                    console.error(response.status.exception.cause.message);
+                    return;
+                }
+                if (response.status.message) {
+                    console.warn(response.status.message);
+                }
+            },
+            false
+        )
+    }
 }
 
 
@@ -124,6 +146,7 @@ class FormInfoPlugin {
  */
 Ext.define('FormInfoPlugin', {
     statics: {
-        showFormContentInfo: FormInfoPlugin.showFormContentInfo
+        showFormContentInfo: FormInfoPlugin.showFormContentInfo,
+        getMainFormProcedureId: FormInfoPlugin.getMainFormProcedureId
     }
 });

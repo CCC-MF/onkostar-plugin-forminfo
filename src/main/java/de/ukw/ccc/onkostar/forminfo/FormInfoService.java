@@ -33,6 +33,18 @@ class FormInfoService {
                 .map(getResultFunction(procedure)).collect(Collectors.toList());
     }
 
+    public int getMainFormProcedureId(int procedureId) {
+        var sql = "SELECT hauptprozedur_id FROM prozedur WHERE id = ?";
+        try {
+            return jdbcTemplate
+                    .queryForObject(sql, (resultSet, i) ->
+                                    resultSet.getInt("hauptprozedur_id")
+                            , procedureId);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("No main form found for subform with ID '%d'", procedureId));
+        }
+    }
+
     private Function<Entry, Result> getResultFunction(Procedure procedure) {
         return entry -> {
             var value = procedure.getValue(entry.name);
