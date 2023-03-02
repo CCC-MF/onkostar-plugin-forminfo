@@ -120,6 +120,49 @@ Ext.syncRequire('app.plugins.forminfo.FormInfoPlugin', () => {
     FormInfoPlugin.getMainFormProcedureId(this, getFieldValue('referenceformfield').id, callbackFunction);
 });
 ```
+## Verwendung in eigenen Plugins
+
+Dieses Plugin stellt den Service `FormInfoService` zur Verfügung. Dieser kann auch in eigenen Plugins genutzt werden.
+
+Zur Verwendung dieses Services muss das Plugin in der Onkostar-Installation installiert sein.
+
+Legen Sie die JAR-Datei des Plugins im Projektverzeichnis `libs` ab und geben Sie folgende Abhängigkeit an:
+
+```xml
+<dependency>
+    <groupId>de.ukw</groupId>
+    <artifactId>onkostar-plugin-forminfo</artifactId>
+    <!-- Version bei Update anpassen! -->
+    <version>0.1.0</version>
+    <scope>system</scope>
+    <!-- Version bei Update anpassen! -->
+    <systemPath>${project.basedir}/libs/onkostar-plugin-forminfo-0.1.0.jar</systemPath>
+</dependency>
+```
+
+Sie können nun wie folgt in Ihrem Plugin auf die verfügbaren Methoden zugreifen:
+
+```java
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+class YourPlugin implements IProcedureAnalyzer {
+
+    @Autowired
+    private FormInfoService formInfoService;
+    
+    // ... weitere Angaben in Ihrem Plugin
+    
+    public void yourMethod() {
+        var mainFormProcedureId = formInfoService.getMainFormProcedureId(123);
+        var formInfo = formInfoService.getFormInfo(mainFormProcedureId);
+        
+        // ... weitere Implementierung
+    } 
+
+}
+
+```
 
 ## Build
 

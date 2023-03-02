@@ -25,33 +25,13 @@
 package de.ukw.ccc.onkostar.forminfo;
 
 /**
- * Type of form field
+ * Exception thrown by FormInfoService
  *
  * @author Paul-Christian Volkmer
  * @since 0.1.0
  */
-public enum Type {
-    BUTTON,
-    FORM_REFERENCE,
-    GROUP,
-    SECTION,
-    SUBFORM,
-    INPUT;
-
-    public static Type from(String type) {
-        switch (type) {
-            case "button":
-                return Type.BUTTON;
-            case "formReference":
-                return Type.FORM_REFERENCE;
-            case "group":
-                return Type.GROUP;
-            case "section":
-                return Type.SECTION;
-            case "subform":
-                return Type.SUBFORM;
-            default:
-                return Type.INPUT;
-        }
+public class FormInfoException extends RuntimeException {
+    public FormInfoException(String msg) {
+        super(msg);
     }
 }

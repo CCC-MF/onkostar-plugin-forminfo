@@ -29,11 +29,18 @@ import de.itc.onkostar.api.Procedure;
 import de.itc.onkostar.api.analysis.AnalyzerRequirement;
 import de.itc.onkostar.api.analysis.IProcedureAnalyzer;
 import de.itc.onkostar.api.analysis.OnkostarPluginType;
+import de.ukw.ccc.onkostar.forminfo.services.FormInfoService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of this plugin
+ *
+ * @author Paul-Christian Volkmer
+ * @since 0.1.0
+ */
 @Component
 public class FormInfoPlugin implements IProcedureAnalyzer {
 
@@ -89,9 +96,9 @@ public class FormInfoPlugin implements IProcedureAnalyzer {
     }
 
     /**
-     * This method returns content of given form
+     * This method returns the content of given form
      *
-     * @param data Data map containing procedure ID of requested form.
+     * @param data Data map containing procedure ID of the requested form.
      * @return List containing content data
      */
     public List<Result> getContent(Map<String, Object> data) {

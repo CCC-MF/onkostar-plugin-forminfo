@@ -1,7 +1,34 @@
-package de.ukw.ccc.onkostar.forminfo;
+/*
+ * MIT License
+ *
+ * Copyright (c) 2023 Comprehensive Cancer Center Mainfranken
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package de.ukw.ccc.onkostar.forminfo.services;
 
 import de.itc.onkostar.api.IOnkostarApi;
 import de.itc.onkostar.api.Procedure;
+import de.ukw.ccc.onkostar.forminfo.FormInfoException;
+import de.ukw.ccc.onkostar.forminfo.Result;
+import de.ukw.ccc.onkostar.forminfo.Type;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +39,31 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation of FormInfoService
+ *
+ * @author Paul-Christian Volkmer
+ * @since 0.1.0
+ */
 @Service
-class FormInfoService {
+class DefaultFormInfoService implements FormInfoService {
 
     private final IOnkostarApi onkostarApi;
 
     private final JdbcTemplate jdbcTemplate;
 
-    FormInfoService(final IOnkostarApi onkostarApi, final DataSource dataSource) {
+    DefaultFormInfoService(final IOnkostarApi onkostarApi, final DataSource dataSource) {
         this.onkostarApi = onkostarApi;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    @Override
     public List<Result> getFormInfo(int procedureId) {
         var procedure = onkostarApi.getProcedure(procedureId);
+
+        if (null == procedure) {
+            throw new FormInfoException(String.format("No such procedure with ID '%d'", procedureId));
+        }
 
         return getDataFormEntry(procedure, null)
                 .stream()
@@ -33,6 +71,7 @@ class FormInfoService {
                 .map(getResultFunction(procedure)).collect(Collectors.toList());
     }
 
+    @Override
     public int getMainFormProcedureId(int procedureId) {
         var sql = "SELECT hauptprozedur_id FROM prozedur WHERE id = ?";
         try {
@@ -41,7 +80,7 @@ class FormInfoService {
                                     resultSet.getInt("hauptprozedur_id")
                             , procedureId);
         } catch (Exception e) {
-            throw new RuntimeException(String.format("No main form found for subform with ID '%d'", procedureId));
+            throw new FormInfoException(String.format("No main form found for subform with ID '%d'", procedureId));
         }
     }
 
@@ -121,10 +160,10 @@ class FormInfoService {
     }
 
     static class Entry {
-        public String name;
-        public String description;
-        public Type type;
-        public List<Entry> children = new ArrayList<>();
+        public final String name;
+        public final String description;
+        public final Type type;
+        public final List<Entry> children = new ArrayList<>();
 
         Entry(String name, String description, Type type) {
             this(name, description, type, List.of());

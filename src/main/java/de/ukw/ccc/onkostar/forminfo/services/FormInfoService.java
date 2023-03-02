@@ -22,36 +22,33 @@
  * SOFTWARE.
  */
 
-package de.ukw.ccc.onkostar.forminfo;
+package de.ukw.ccc.onkostar.forminfo.services;
+
+import de.ukw.ccc.onkostar.forminfo.FormInfoException;
+import de.ukw.ccc.onkostar.forminfo.Result;
+
+import java.util.List;
 
 /**
- * Type of form field
+ * Interface of all FormInfoService
  *
  * @author Paul-Christian Volkmer
  * @since 0.1.0
  */
-public enum Type {
-    BUTTON,
-    FORM_REFERENCE,
-    GROUP,
-    SECTION,
-    SUBFORM,
-    INPUT;
+public interface FormInfoService {
+    /**
+     * This method returns the content of given form
+     *
+     * @param procedureId The procedure ID of the requested form.
+     * @return List containing content data
+     */
+    List<Result> getFormInfo(int procedureId) throws FormInfoException;
 
-    public static Type from(String type) {
-        switch (type) {
-            case "button":
-                return Type.BUTTON;
-            case "formReference":
-                return Type.FORM_REFERENCE;
-            case "group":
-                return Type.GROUP;
-            case "section":
-                return Type.SECTION;
-            case "subform":
-                return Type.SUBFORM;
-            default:
-                return Type.INPUT;
-        }
-    }
+    /**
+     * This method returns the procedure ID of the related main form for given subform
+     *
+     * @param procedureId The ID of a subform.
+     * @return procedure ID of the related main form
+     */
+    int getMainFormProcedureId(int procedureId) throws FormInfoException;
 }
