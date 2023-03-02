@@ -98,7 +98,9 @@ class FormInfoPlugin {
                 defaults: {
                     xtype: 'label'
                 },
-                items: items
+                items: items,
+                flex: 1,
+                overflowY: 'scroll'
             });
 
             Ext.create('Ext.window.Window', {
