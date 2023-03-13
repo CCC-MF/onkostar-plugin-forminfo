@@ -84,6 +84,13 @@ class DefaultFormInfoService implements FormInfoService {
         }
     }
 
+    @Override
+    public List<Integer> getSubFormProcedureIds(int procedureId) {
+        var sql = "SELECT id FROM prozedur WHERE hauptprozedur_id = ?";
+        return jdbcTemplate
+                .queryForList(sql, Integer.class, procedureId);
+    }
+
     private Function<Entry, Result> getResultFunction(Procedure procedure) {
         return entry -> {
             var value = procedure.getValue(entry.name);

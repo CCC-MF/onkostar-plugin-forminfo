@@ -51,4 +51,12 @@ public interface FormInfoService {
      * @return procedure ID of the related main form
      */
     int getMainFormProcedureId(int procedureId) throws FormInfoException;
+
+    /**
+     * This method returns the procedure IDs of the related sub forms for the given main form
+     *
+     * @param procedureId The ID of a form.
+     * @return procedure IDs of the related sub forms
+     */
+    List<Integer> getSubFormProcedureIds(int procedureId);
 }

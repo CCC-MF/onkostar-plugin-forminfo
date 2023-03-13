@@ -120,6 +120,23 @@ Ext.syncRequire('app.plugins.forminfo.FormInfoPlugin', () => {
     FormInfoPlugin.getMainFormProcedureId(this, getFieldValue('referenceformfield').id, callbackFunction);
 });
 ```
+
+### Methode `getSubFormProcedureIds()`
+
+Das Plugin stellt analog dazu die Methode `getSubFormProcedureIds()` bereit um die IDs von Unterformularen zu einem Hauptformular zu ermitteln.
+
+Mit diesem Werten ist es möglich, Informationen über enthaltene Unterformulare eines Formulars abzurufen.
+
+```javascript
+executePluginMethod(
+   'FormInfoPlugin',
+   'getSubFormProcedureIds',
+   { id: 1234 },
+   function (result) {console.log(result);},
+   false
+);
+```
+
 ## Verwendung in eigenen Plugins
 
 Dieses Plugin stellt den Service `FormInfoService` zur Verfügung. Dieser kann auch in eigenen Plugins genutzt werden.

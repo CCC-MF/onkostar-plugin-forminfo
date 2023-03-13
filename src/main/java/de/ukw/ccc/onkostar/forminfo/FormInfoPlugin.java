@@ -132,4 +132,19 @@ public class FormInfoPlugin implements IProcedureAnalyzer {
             throw new RuntimeException(String.format("Invalid procedure id: %s", id));
         }
     }
+
+    /**
+     * This method returns the procedure IDs of the related sub forms for given main form
+     *
+     * @param data Data map containing ID of a subform.
+     * @return procedure IDs of the related sub forms
+     */
+    public List<Integer> getSubFormProcedureIds(Map<String, Object> data) {
+        var id = data.get("id");
+        if (null == id) {
+            throw new RuntimeException("Missing value for 'id'");
+        }
+
+        return service.getSubFormProcedureIds(Integer.parseInt(id.toString()));
+    }
 }
